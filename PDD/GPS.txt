@@ -1,0 +1,22 @@
+sudo apt-get install gpsd gpsd-clients python-gps
+
+sudo systemctl stop gpsd.socket
+sudo systemctl disable gpsd.socket
+
+sudo nano /boot/cmdline.txt
+
+dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait
+
+sudo systemctl stop serial-getty@ttyS0.service
+sudo systemctl disable serial-getty@ttyS0.service
+
+sudo nano /boot/config.txt
+
+enable_uart=1
+
+reboot
+
+sudo killall gpsd
+sudo gpsd /dev/ttyS0 -F /var/run/gpsd.sock
+
+$ cgps -s
